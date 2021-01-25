@@ -1,0 +1,2 @@
+class Comunity < ApplicationRecord
+end

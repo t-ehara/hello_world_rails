@@ -27,8 +27,9 @@ RSpec.describe User, type: :model do
   # end
 
   context "すでに同じ名前のaccountが存在しているとき" do
+    before { create(:user, account: "foo") }
+
     it "ユーザー作成に失敗する" do
-      create(:user, account: "foo")
       user = build(:user, account: "foo")
       expect(user).to be_invalid
       expect(user.errors.details[:account][0][:error]).to eq :taken

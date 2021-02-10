@@ -37,7 +37,7 @@ RSpec.describe "Users", type: :request do
     context "指定した id のユーザーが存在しないとき" do
       let(:user_id) { 10000 }
 
-      fit "ユーザーが見つからない" do
+      it "ユーザーが見つからない" do
         expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -45,7 +45,30 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "POST /users" do
-    it "ユーザーのレコードを作成する" do
+    subject { post(users_path, params: params) }
+
+    context "適切なパラメーターを送信したとき" do
+      let(:params) do
+        { user: attributes_for(:user) }
+      end
+
+      it "ユーザーのレコードを作成する" do
+        expect { subject }.to change { User.count }.by(1)
+        res = JSON.parse(response.body)
+        expect(res["name"]).to eq params[:user][:name]
+        expect(res["account"]).to eq params[:user][:account]
+        expect(res["email"]).to eq params[:user][:email]
+
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context "不適切なパラメーターを送信したとき" do
+      let(:params) { attributes_for(:user) }
+      fit "エラーする" do
+        binding.pry
+        expect { subject }.to raise_error(ActionController::ParameterMissing)
+      end
     end
   end
   describe "PATCH /users/:id" do

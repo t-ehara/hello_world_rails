@@ -15,6 +15,7 @@ class UsersController < ApplicationController
     #   account: params[:account],
     #   email: params[:email],
     # )
+
     @user = User.new(user_params)
 
     #インスタンスをDBに保存する
@@ -41,6 +42,7 @@ class UsersController < ApplicationController
   private
 
     def user_params
+
       params.require(:user).permit(:name, :account, :email)
     end
 

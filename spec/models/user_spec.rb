@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   context "account を指定しているとき" do
-    it "ユーザーが作られる" do
+    fit "ユーザーが作られる" do
+      binding.pry
       user = build(:user)
       expect(user).to be_valid
     end

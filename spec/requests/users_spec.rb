@@ -78,8 +78,7 @@ RSpec.describe "Users", type: :request do
     end
     let(:user_id) { user.id }
     let(:user) { create(:user) }
-    fit "任意のユーザーのレコードを更新できる" do
-      # binding.pry
+    it "任意のユーザーのレコードを更新できる" do
       expect { subject }.to not_change { user.reload.account } &
                             not_change { user.reload.email } &
                             not_change { user.reload.created_at } &
@@ -88,7 +87,13 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "DELETE /users/:id" do
-    it "任意のユーザーのレコードを削除できる" do
+    #任意のレコードを呼び出したとき
+    subject { delete(user_path(user_id)) }
+    let(:user_id) { user.id }
+    let!(:user) { create(:user) }
+    fit "任意のユーザーのレコードを削除できる" do
+      #指定したレコードを削除している
+      expect { subject }.to change { User.count }.by(-1)
     end
   end
 end
